@@ -1,0 +1,23 @@
+# Ambiente virtual Python
+.venv/
+venv/
+
+# Arquivos Python
+__pycache__/
+*.py[cod]
+
+# Banco de dados
+db.sqlite3
+backend/db.sqlite3
+
+# Dependências do Node
+node_modules/
+frontend/node_modules/
+
+# Arquivos gerados pelo Vite
+dist/
+frontend/dist/
+
+# Arquivos de ambiente
+.env
+.env.*
