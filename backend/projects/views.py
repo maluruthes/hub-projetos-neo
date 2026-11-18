@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
 from .models import Project
@@ -10,7 +8,7 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
-        queryset = Project.objects.all()
+        queryset = Project.objects.prefetch_related('members').all()
 
         name = self.request.query_params.get('name')
         company = self.request.query_params.get('company')
