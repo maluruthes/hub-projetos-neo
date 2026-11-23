@@ -190,7 +190,7 @@ function Members() {
 
           <div className="member-form-grid">
             <div className="form-field">
-              <label>Nome completo</label>
+              <label>Sigla</label>
               <input
                 type="text"
                 placeholder="Ex.: Maria Silva"

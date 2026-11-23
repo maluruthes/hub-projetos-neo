@@ -105,6 +105,12 @@ function Projects() {
     return correspondeBusca && correspondeEmpresa
   })
 
+  // Limpar filtros
+  function limparFiltros() {
+    setBusca('')
+    setEmpresaSelecionada('Todas')
+  }
+
   // Abrir formulário de novo projeto
   function novoCadastro() {
     setProjetoEditando(null)
@@ -333,6 +339,14 @@ function Projects() {
             <option value="Embraco">Embraco</option>
             <option value="Landis+Gyr">Landis+Gyr</option>
           </select>
+
+          <button
+            type="button"
+            className="clear-filters-button"
+            onClick={limparFiltros}
+          >
+            Limpar filtros
+          </button>
         </div>
 
         {carregando && <p>Carregando projetos...</p>}

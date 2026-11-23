@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders', #comunicação entre o frontend e o backend
     'members', #registra aplicação de membros
     'projects', ##registra aplicação de projetos
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -136,8 +137,22 @@ CORS_ALLOWED_ORIGINS = [   # Configuração para comunicação com o React
     'http://127.0.0.1:5173',
 ]
 
-REST_FRAMEWORK = {     # Configurações da API
+REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
