@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 
 function Login() {
   const [username, setUsername] = useState('')
@@ -19,7 +19,7 @@ function Login() {
     try {
       await login(username, password)
       navigate('/')
-    } catch (error) {
+    } catch {
       setErro('Usuário ou senha incorretos.')
     } finally {
       setCarregando(false)

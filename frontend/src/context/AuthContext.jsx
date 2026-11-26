@@ -1,18 +1,19 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import api from '../services/api'
-
-const AuthContext = createContext(null)
+import { AuthContext } from './AuthContextBase'
 
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null)
-  const [carregando, setCarregando] = useState(true)
+
+  const [carregando, setCarregando] = useState(
+    () => Boolean(sessionStorage.getItem('access'))
+  )
 
   // Recupera a sessão ao atualizar a página
   useEffect(() => {
     const access = sessionStorage.getItem('access')
 
     if (!access) {
-      setCarregando(false)
       return
     }
 
@@ -84,8 +85,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  return useContext(AuthContext)
 }

@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
+import { useEffect, useMemo, useRef } from 'react';
 import './GhostFibers.css';
 
 const MAX_RENDER_DIM = 2400;
@@ -577,7 +576,7 @@ const GhostFibers = ({
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const wakeRef = useRef(null);
-  const settings = {
+  const settings = useMemo(() => ({
     glowColor: String(glowColor),
     lineColor: lineColor ? String(lineColor) : '',
     secondaryColor: secondaryColor ? String(secondaryColor) : '',
@@ -615,9 +614,19 @@ const GhostFibers = ({
     lightMode,
     paused,
     dpr
-  };
+  }), [
+    glowColor, lineColor, secondaryColor, gradient, speed, scale,
+    rotation, rollSpeed, layers, waves, twist, threads, volume,
+    spread, density, thickness, flow, fiberStyle, tips, foldGlow,
+    perspective, depthOfField, focusDepth, particles, sparkle, glow,
+    brightness, vignette, grain, mouseInteraction, hoverEffect,
+    mouseStrength, pulseOnClick, intro, lightMode, paused, dpr
+  ]);
   const settingsRef = useRef(settings);
+
+  useEffect(() => {
   settingsRef.current = settings;
+  }, [settings]);
 
   useEffect(() => {
     const container = containerRef.current;

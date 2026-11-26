@@ -17,29 +17,40 @@ function Members() {
     photo_url: ''
   })
 
-  // Buscar membros
-  async function carregarMembros() {
-    try {
-      setErro('')
+    useEffect(() => {
+    let ativo = true
 
-      const resposta = await api.get('members/')
+    async function buscarMembrosInicial() {
+        try {
+        const resposta = await api.get('members/')
 
-      const dados = Array.isArray(resposta.data)
-        ? resposta.data
-        : resposta.data.results || []
+        const dados = Array.isArray(resposta.data)
+            ? resposta.data
+            : resposta.data.results || []
 
-      setListaMembros(dados)
-    } catch (error) {
-      console.error('Erro ao carregar membros:', error)
-      setErro('Não foi possível carregar os membros.')
-    } finally {
-      setCarregando(false)
+        if (ativo) {
+            setListaMembros(dados)
+            setErro('')
+        }
+        } catch (error) {
+        console.error('Erro ao carregar membros:', error)
+
+        if (ativo) {
+            setErro('Não foi possível carregar os membros.')
+        }
+        } finally {
+        if (ativo) {
+            setCarregando(false)
+        }
+        }
     }
-  }
 
-  useEffect(() => {
-    carregarMembros()
-  }, [])
+    buscarMembrosInicial()
+
+    return () => {
+        ativo = false
+    }
+    }, [])
 
   // Filtrar membros
   const membrosFiltrados = listaMembros.filter((membro) => {
@@ -190,7 +201,7 @@ function Members() {
 
           <div className="member-form-grid">
             <div className="form-field">
-              <label>Sigla</label>
+              <label>Nome completo</label>
               <input
                 type="text"
                 placeholder="Ex.: Maria Silva"

@@ -1,13 +1,18 @@
 import axios from 'axios'
 
+const API_URL = 'http://127.0.0.1:8000/api/'
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Adiciona o token de acesso automaticamente nas requisições
+// Controla a renovação do token para evitar várias renovações simultâneas
+let renovacaoEmAndamento = null
+
+// Adiciona o token automaticamente
 api.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('access')
 
@@ -18,7 +23,7 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Tenta renovar o token quando ele expira
+// Trata erros de autenticação e renova o token
 api.interceptors.response.use(
   (response) => response,
 
@@ -26,44 +31,53 @@ api.interceptors.response.use(
     const requisicaoOriginal = error.config
 
     if (
-      error.response?.status === 401 &&
-      !requisicaoOriginal._retry &&
-      !requisicaoOriginal.url.includes('token/')
+      error.response?.status !== 401 ||
+      !requisicaoOriginal ||
+      requisicaoOriginal._retry ||
+      requisicaoOriginal.url?.includes('token/')
     ) {
-      requisicaoOriginal._retry = true
-
-      const refresh = sessionStorage.getItem('refresh')
-
-      if (!refresh) {
-        sessionStorage.removeItem('access')
-        sessionStorage.removeItem('refresh')
-        window.dispatchEvent(new Event('auth:logout'))
-        return Promise.reject(error)
-      }
-
-      try {
-        const resposta = await axios.post(
-          'http://127.0.0.1:8000/api/token/refresh/',
-          { refresh }
-        )
-
-        const novoAccess = resposta.data.access
-
-        sessionStorage.setItem('access', novoAccess)
-
-        requisicaoOriginal.headers.Authorization = `Bearer ${novoAccess}`
-
-        return api(requisicaoOriginal)
-      } catch (erroRefresh) {
-        sessionStorage.removeItem('access')
-        sessionStorage.removeItem('refresh')
-        window.dispatchEvent(new Event('auth:logout'))
-
-        return Promise.reject(erroRefresh)
-      }
+      return Promise.reject(error)
     }
 
-    return Promise.reject(error)
+    requisicaoOriginal._retry = true
+
+    const refresh = sessionStorage.getItem('refresh')
+
+    if (!refresh) {
+      sessionStorage.removeItem('access')
+      sessionStorage.removeItem('refresh')
+      window.dispatchEvent(new Event('auth:logout'))
+
+      return Promise.reject(error)
+    }
+
+    try {
+      if (!renovacaoEmAndamento) {
+        renovacaoEmAndamento = axios.post(
+          `${API_URL}token/refresh/`,
+          { refresh }
+        )
+      }
+
+      const resposta = await renovacaoEmAndamento
+      const novoAccess = resposta.data.access
+
+      sessionStorage.setItem('access', novoAccess)
+
+      requisicaoOriginal.headers.Authorization = `Bearer ${novoAccess}`
+
+      return api(requisicaoOriginal)
+
+    } catch (erroRefresh) {
+      sessionStorage.removeItem('access')
+      sessionStorage.removeItem('refresh')
+      window.dispatchEvent(new Event('auth:logout'))
+
+      return Promise.reject(erroRefresh)
+
+    } finally {
+      renovacaoEmAndamento = null
+    }
   }
 )
 

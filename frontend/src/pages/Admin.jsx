@@ -30,16 +30,40 @@ function Admin() {
     try {
       const resposta = await api.get('users/')
       setUsuarios(resposta.data)
-    } catch (error) {
+    } catch {
       setErroLista('Não foi possível carregar os usuários.')
     } finally {
       setCarregandoLista(false)
     }
   }
 
-  useEffect(() => {
-    carregarUsuarios()
-  }, [])
+    useEffect(() => {
+    let ativo = true
+
+    async function buscarUsuariosInicial() {
+        try {
+        const resposta = await api.get('users/')
+
+        if (ativo) {
+            setUsuarios(resposta.data)
+        }
+        } catch {
+        if (ativo) {
+            setErroLista('Não foi possível carregar os usuários.')
+        }
+        } finally {
+        if (ativo) {
+            setCarregandoLista(false)
+        }
+        }
+    }
+
+    buscarUsuariosInicial()
+
+    return () => {
+        ativo = false
+    }
+    }, [])
 
   // Cria um novo usuário
   async function handleCriarUsuario(e) {

@@ -7,6 +7,8 @@
 }
 
 .app {
+  position: relative;
+  isolation: isolate;
   display: flex;
   min-height: 100vh;
   background-color: #17191d;
@@ -25,6 +27,8 @@ textarea {
 ========================================= */
 
 .sidebar {
+  position: relative;
+  z-index: 1;
   width: 240px;
   min-height: 100vh;
   background-color: #202329;
@@ -69,11 +73,22 @@ textarea {
   color: #f28c28;
 }
 
+.logout-button {
+  margin-top: auto;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
 /* =========================================
    3. ÁREA PRINCIPAL
 ========================================= */
 
 .main-content {
+  position: relative;
+  z-index: 1;
   flex: 1;
   padding: 40px;
   min-width: 0;
@@ -101,8 +116,6 @@ textarea {
   font-size: 14px;
   margin: 0;
 }
-
-/* Botão novo projeto */
 
 .new-project-button {
   background-color: #f28c28;
@@ -243,8 +256,6 @@ textarea {
   border-color: #f28c28;
 }
 
-/* Botão limpar filtros */
-
 .clear-filters-button {
   height: 46px;
   padding: 0 20px;
@@ -297,8 +308,6 @@ textarea {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* Parte superior do card */
-
 .project-card-top,
 .card-header {
   display: flex;
@@ -307,8 +316,6 @@ textarea {
   gap: 12px;
   margin-bottom: 22px;
 }
-
-/* Etiqueta da empresa */
 
 .company-tag {
   display: inline-flex;
@@ -322,8 +329,6 @@ textarea {
   font-weight: 600;
   letter-spacing: 0.5px;
 }
-
-/* Conteúdo do card */
 
 .project-card-content {
   flex: 1;
@@ -375,8 +380,6 @@ textarea {
   padding-left: 4px;
 }
 
-/* Avatares */
-
 .member-avatar {
   width: 30px;
   height: 30px;
@@ -396,8 +399,6 @@ textarea {
 .member-avatar:first-child {
   margin-left: 0;
 }
-
-/* Membros adicionais */
 
 .extra-members {
   background: #26394a;
@@ -437,8 +438,6 @@ textarea {
   border-color: #414752;
 }
 
-/* Mensagem sem resultados */
-
 .empty-message {
   color: #a4a9b2;
   text-align: center;
@@ -452,70 +451,215 @@ textarea {
 .project-form {
   background-color: #202329;
   border: 1px solid #383d45;
-  border-radius: 12px;
-  padding: 25px;
+  border-radius: 14px;
+  padding: 28px;
   margin-bottom: 30px;
-  max-width: 650px;
-}
-
-.project-form h2 {
-  margin-bottom: 22px;
-  color: #f5f5f5;
-}
-
-.project-form label {
-  display: block;
-  color: #d5d8de;
-  font-size: 14px;
-  margin-bottom: 8px;
-  margin-top: 16px;
-}
-
-.project-form input,
-.project-form select,
-.project-form textarea {
   width: 100%;
+  max-width: 850px;
+}
+
+.project-form-header {
+  margin-bottom: 26px;
+}
+
+.project-form-header h2 {
+  margin: 0 0 8px;
+  color: #f5f5f5;
+  font-size: 22px;
+}
+
+.project-form-header p {
+  margin: 0;
+  color: #a4a9b2;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.project-form-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 20px;
+  min-width: 0;
+}
+
+.project-form .form-field label,
+.members-field-header label {
+  color: #d5d8de;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.project-form .form-field input,
+.project-form .form-field select,
+.project-form .form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
   background-color: #17191d;
   color: #f5f5f5;
   border: 1px solid #383d45;
-  border-radius: 7px;
-  padding: 12px;
-  font-size: 14px;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
   font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.project-form textarea {
-  min-height: 90px;
+.project-form .form-field input,
+.project-form .form-field select {
+  min-height: 44px;
+}
+
+.project-form .form-field textarea {
+  min-height: 105px;
   resize: vertical;
+  line-height: 1.5;
 }
 
-.project-form input:focus,
-.project-form select:focus,
-.project-form textarea:focus {
-  outline: 1px solid #f28c28;
+.project-form .form-field input:focus,
+.project-form .form-field select:focus,
+.project-form .form-field textarea:focus {
+  outline: none;
+  border-color: #f28c28;
+  box-shadow: 0 0 0 2px rgba(242, 140, 40, 0.12);
+}
+
+.description-field {
+  margin-top: 2px;
+}
+
+.members-field {
+  margin-top: 8px;
+}
+
+.members-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.members-field-header p {
+  margin: 6px 0 0;
+  color: #9299a4;
+  font-size: 12px;
+}
+
+.members-count {
+  color: #f28c28;
+  background: rgba(242, 140, 40, 0.12);
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.members-selection {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 15px;
+  background: #191c21;
+  border: 1px solid #343941;
+  border-radius: 10px;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+.members-selection > p {
+  color: #a4a9b2;
+  font-size: 13px;
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.project-form .member-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  margin: 0;
+  padding: 9px 10px;
+  background: #252a32;
+  border: 1px solid #383d45;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.project-form .member-option:hover {
+  background: #303640;
   border-color: #f28c28;
 }
 
-/* Botões do formulário */
+.project-form .member-option input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+  accent-color: #f28c28;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Avatar específico da seleção de membros */
+.project-form .member-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #287e80;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.project-form .member-name {
+  color: #e1e3e7;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .form-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid #343941;
 }
 
 .form-buttons button {
-  padding: 11px 16px;
-  border-radius: 7px;
-  font-weight: bold;
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .cancel-button {
   background-color: transparent;
   color: #d5d8de;
   border: 1px solid #555b65;
+}
+
+.cancel-button:hover {
+  background-color: #30343b;
 }
 
 .save-button {
@@ -535,8 +679,6 @@ textarea {
 .members-page {
   width: 100%;
 }
-
-/* Título pequeno da página */
 
 .page-eyebrow {
   display: block;
@@ -685,8 +827,6 @@ textarea {
   gap: 20px;
 }
 
-/* Card individual */
-
 .member-card {
   background-color: #202329;
   border: 1px solid #343941;
@@ -701,16 +841,12 @@ textarea {
   transform: translateY(-3px);
 }
 
-/* Parte superior do card */
-
 .member-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 22px;
 }
-
-/* Foto ou avatar */
 
 .member-photo,
 .member-photo-placeholder {
@@ -731,8 +867,6 @@ textarea {
   font-size: 24px;
   font-weight: bold;
 }
-
-/* Ações dos membros */
 
 .member-actions {
   display: flex;
@@ -756,8 +890,6 @@ textarea {
   border-color: #f28c28;
 }
 
-/* Informações do membro */
-
 .member-info {
   min-width: 0;
   min-height: 105px;
@@ -770,8 +902,6 @@ textarea {
   overflow-wrap: anywhere;
 }
 
-/* Cargo */
-
 .member-role {
   display: inline-block;
   background: #3a3027;
@@ -781,8 +911,6 @@ textarea {
   font-size: 11px;
   margin-bottom: 13px;
 }
-
-/* E-mail */
 
 .member-email {
   color: #a4a9b2;
@@ -811,8 +939,6 @@ textarea {
   font-weight: bold;
 }
 
-/* Status */
-
 .member-status {
   display: flex;
   align-items: center;
@@ -839,10 +965,7 @@ textarea {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .projects-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
+  .projects-grid,
   .members-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -904,6 +1027,36 @@ textarea {
   .members-search {
     max-width: 100%;
   }
+
+  .admin-list-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-section {
+    padding: 18px;
+  }
+}
+
+/* Telas menores que 650px */
+
+@media (max-width: 650px) {
+  .project-form {
+    padding: 20px;
+  }
+
+  .project-form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .members-selection {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .members-field-header {
+    align-items: flex-start;
+  }
 }
 
 /* Telas menores que 600px */
@@ -938,15 +1091,8 @@ textarea {
 }
 
 /* =========================================
-   FUNDO ANIMADO
+   20. FUNDO ANIMADO
 ========================================= */
-
-.app {
-  position: relative;
-  isolation: isolate;
-  min-height: 100vh;
-  background-color: #17191d;
-}
 
 .background-animation {
   position: fixed;
@@ -962,13 +1108,9 @@ textarea {
   height: 100%;
 }
 
-.sidebar,
-.main-content {
-  position: relative;
-  z-index: 1;
-}
-
-/* LOGIN */
+/* =========================================
+   21. LOGIN
+========================================= */
 
 .login-container {
   position: fixed;
@@ -1045,14 +1187,9 @@ textarea {
   color: #ff7777 !important;
 }
 
-.logout-button {
-  margin-top: auto;
-  background: transparent;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  text-align: left;
-}
+/* =========================================
+   22. PAINEL ADMINISTRATIVO
+========================================= */
 
 .admin-page {
   padding: 30px;
@@ -1066,8 +1203,6 @@ textarea {
   border-radius: 12px;
 }
 
-/* PAINEL ADMINISTRATIVO */
-
 .admin-section {
   margin-top: 25px;
   padding: 28px;
@@ -1079,9 +1214,6 @@ textarea {
 
 .admin-section h2 {
   margin-top: 0;
-}
-
-.admin-section h2 {
   margin-bottom: 12px;
 }
 
@@ -1101,7 +1233,8 @@ textarea {
   color: #d5d9df;
 }
 
-.admin-form input {
+.admin-form input,
+.admin-form select {
   padding: 12px;
   border: 1px solid #454b55;
   border-radius: 7px;
@@ -1129,6 +1262,11 @@ textarea {
   cursor: not-allowed;
 }
 
+.admin-form .admin-cancel {
+  margin-top: 0;
+  background: #454b55;
+}
+
 .admin-success {
   color: #75d69c;
 }
@@ -1137,7 +1275,9 @@ textarea {
   color: #ff7777;
 }
 
-/* GERENCIAMENTO DE USUÁRIOS */
+/* =========================================
+   23. GERENCIAMENTO DE USUÁRIOS
+========================================= */
 
 .admin-list-header {
   display: flex;
@@ -1243,39 +1383,9 @@ textarea {
   color: #ff7777;
 }
 
-.admin-form select {
-  padding: 12px;
-  border: 1px solid #454b55;
-  border-radius: 7px;
-  background: #17191d;
-  color: white;
-}
-
-.admin-form .admin-cancel {
-  margin-top: 0;
-  background: #454b55;
-}
-
-.admin-success {
-  color: #75d69c;
-}
-
-.admin-error {
-  color: #ff7777;
-}
-
-@media (max-width: 700px) {
-  .admin-list-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .admin-section {
-    padding: 18px;
-  }
-}
-
-/* CABEÇALHO DO PAINEL ADMINISTRATIVO */
+/* =========================================
+   24. CABEÇALHO DO PAINEL ADMINISTRATIVO
+========================================= */
 
 .admin-page .admin-header {
   display: flex;
